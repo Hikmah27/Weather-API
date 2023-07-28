@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+
+    <style>
+        body {
+            background-image: url(Images/weather.jpg);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                background-image: url(Images/weather.jpg);
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="container text-center mt-3">Weather Forecast</h1>
+    <section class="vh-100">
+        <div class="container mt-3">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-md-9 col-lg-11 col-sm-12">
+                    <div class="input-group rounded mb-3">
+                        <input type="search" class="form-control rounded" placeholder="City" aria-label="Search"
+                            aria-describedby="search-addon" id="countryName" />
+                        <a href="#!" type="button">
+                            <button onclick="getInfo()" class="btn btn-secondary mx-2" type="button"
+                                id="button-addon1">Check</button>
+                        </a>
+                    </div>
+                    <div id="wrapper-bg" class="p-5 bg-image shadow-4-strong">
+                        <!-- Main current data -->
+                        <div class="card-header pb-5 border-0 h-100">
+                            <div class="">
+                                <p class="text-center"><span id="city" class="h2">City Name</span>,<span class="h2" id="country">Country</span></p>
+                                <p class="h5 text-center" id="cloud">Broken Clouds</p>
+                                <p class=" mb-1" id="wrapper-name">Temperature: <span id="temperature"></span></p>
+                                <p class=" mb-1" id="wrapper-temp">Pressure: <span id="pressure"></span></p>
+                                <p class="">Humidity: <span id="humidity"></span></p>
+                            </div>
+                            <hr>
+                            <div class="">
+                                <p class="mb-1">longitude: <span id="long"></span></p>
+                                <p class="mb-1">latitude: <span id="lat"></span></p>
+                                <p class="">Wind speed: <span id="speed"></span></p>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const getInfo = async () => {
+            let apiKey = "264e17e71ebd631f1dedbbcb0948e703";
+            let endpoint = `https://api.openweathermap.org/data/2.5/weather?q=${countryName.value}&appid=${apiKey}`;
+            let response = await fetch(endpoint)
+            let convertedResponse = await response.json()
+            console.log(convertedResponse);
+            cloud.innerHTML = `${convertedResponse.weather[0].description}`
+            lat.innerHTML = `${convertedResponse.coord.lat}`
+            long.innerHTML = `${convertedResponse.coord.lon}`
+            pressure.innerHTML = `${convertedResponse.main.pressure}`
+            humidity.innerHTML = `${convertedResponse.main.humidity}`
+            let temp = convertedResponse.main.temp - 273
+            let temp1 = Math.round(temp);
+            temperature.innerHTML = `${temp1}⁰C`
+            speed.innerHTML = `${convertedResponse.wind.speed}`
+            city.innerHTML = `${convertedResponse.name}`
+            country.innerHTML = `${convertedResponse.sys.country}`
+        } 
+    </script>
+</body>
+</html>
